@@ -1,6 +1,6 @@
 import { db } from "ayyra/server/db";
 import { ModifierFlags } from "typescript";
-import { SignedIn, SignedOut, SignInButton, UserButton } from "@clerk/nextjs";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 
 export const dynamic = "force-dynamic";
 
@@ -10,10 +10,10 @@ async function Images() {
   });
   return (
     <div className="flex flex-wrap gap-4">
-      {[...images, ...images, , ...images]
+      {images
         .filter((image) => image !== undefined)
-        .map((image, index) => (
-          <div key={image.id + "-" + index} className="w-48">
+        .map((image) => (
+          <div key={image.id} className="w-48">
             <img src={image.url} />
             <div>{image.name}</div>
           </div>
