@@ -1,6 +1,6 @@
 import { db } from "ayyra/server/db";
-import Link from "next/link";
-import { ostring } from "zod";
+
+export const dynamic = "force-dynamic";
 
 const mockUrls = [
   "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejGuGAPqbEcyZ47Bsm3YUxtk8g6nuKlVjWQPCb",
