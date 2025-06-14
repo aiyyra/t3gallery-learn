@@ -1,4 +1,6 @@
+import { db } from "ayyra/server/db";
 import Link from "next/link";
+import { ostring } from "zod";
 
 const mockUrls = [
   "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejGuGAPqbEcyZ47Bsm3YUxtk8g6nuKlVjWQPCb",
@@ -12,14 +14,20 @@ const mockImages = mockUrls.map((url, index) => ({
   url,
 }));
 
-export default function HomePage() {
+const posts = await db.query.posts.findMany();
+console.log("Posts from DB:", posts);
+
+export default async function HomePage() {
   return (
     <main className="">
       <div className="flex flex-wrap gap-4">
+        {posts.map((post) => (
+          <div key={post.id}>{post.name}</div>
+        ))}
         {[...mockImages, ...mockImages, , ...mockImages]
           .filter((image) => image !== undefined)
-          .map((image) => (
-            <div key={image.id} className="w-48">
+          .map((image, index) => (
+            <div key={image.id + "-" + index} className="w-48">
               <img src={image.url} />
             </div>
           ))}
