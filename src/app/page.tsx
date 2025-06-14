@@ -1,34 +1,22 @@
 import { db } from "ayyra/server/db";
+import { ModifierFlags } from "typescript";
 
 export const dynamic = "force-dynamic";
 
-const mockUrls = [
-  "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejGuGAPqbEcyZ47Bsm3YUxtk8g6nuKlVjWQPCb",
-  "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejB87OrAwdjD0k8S49sx1hHcUlE6MaTFO7fQBn",
-  "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejr29yLKB7HydUiVcMnPfskj2RWBmDJ9AQwOh0",
-  "https://j1t56ymklc.ufs.sh/f/8K4uFAPRvfejqiULWx0bZCI5efow8SJQM1WA7X4phUFDLPvm",
-];
-
-const mockImages = mockUrls.map((url, index) => ({
-  id: index + 1,
-  url,
-}));
-
 export default async function HomePage() {
-  const posts = await db.query.posts.findMany();
-  console.log("Posts from DB:", posts);
+  const images = await db.query.images.findMany({
+    orderBy: (model, { desc }) => desc(model.id),
+  });
 
   return (
     <main className="">
       <div className="flex flex-wrap gap-4">
-        {posts.map((post) => (
-          <div key={post.id}>{post.name}</div>
-        ))}
-        {[...mockImages, ...mockImages, , ...mockImages]
+        {[...images, ...images, , ...images]
           .filter((image) => image !== undefined)
           .map((image, index) => (
             <div key={image.id + "-" + index} className="w-48">
               <img src={image.url} />
+              <div>{image.name}</div>
             </div>
           ))}
       </div>
