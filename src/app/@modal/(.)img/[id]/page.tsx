@@ -1,27 +1,18 @@
 import { getImage } from "ayyra/server/queries";
+import { Modal } from "./modal";
+import FullPageImageView from "ayyra/components/full-image-page";
 
-export default async function PhotoModal({
-  params,
+export default function PhotoModal({
+  params: { id: photoId },
 }: {
-  params: Promise<{ id: string }>;
+  params: { id: string };
 }) {
-  const photoId = (await params).id;
   const idAsNumber = Number(photoId);
   if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id");
 
-  const image = await getImage(idAsNumber);
-
   return (
-    <div>
-      <img src={image.url} className="w-96" />
-    </div>
+    <Modal>
+      <FullPageImageView id={idAsNumber} />
+    </Modal>
   );
 }
-
-// export default function PhotoModal({
-//   params: { id: photoId },
-// }: {
-//   params: { id: string };
-// }) {
-//   return <div>{photoId}</div>;
-// }
