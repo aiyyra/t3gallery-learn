@@ -17,8 +17,6 @@ const useUploadThingInputProps = (...args: Input) => {
 
     const selectedFiles = Array.from(e.target.files);
     const result = await $ut.startUpload(selectedFiles);
-
-    console.log("uploaded files", result);
   };
 
   return {

@@ -1,7 +1,7 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 
-import { currentUser } from "@clerk/nextjs/server";
+import { clerkClient, currentUser } from "@clerk/nextjs/server";
 import { db } from "ayyra/server/db";
 import { images } from "ayyra/server/db/schema";
 import { ratelimit } from "ayyra/server/ratelimit";
@@ -27,6 +27,10 @@ export const ourFileRouter = {
       const user = await currentUser()
       // If you throw, the user will not be able to upload
       if (!user?.id) throw new UploadThingError("Unauthorized");
+
+      const fullUserData = (await clerkClient()).users.getUser(user.id)
+      if((await fullUserData).privateMetadata?.["can-upload"] !== true )
+        throw new UploadThingError("User does not have upload permission")
 
       const { success } = await ratelimit.limit(user.id);
       if(!success) throw new Error("Ratelimited")
