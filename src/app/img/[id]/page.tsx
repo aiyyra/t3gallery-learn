@@ -1,5 +1,4 @@
-import { getImage } from "ayyra/server/queries";
-import FullPageImageView from "ayyra/components/full-image-page";
+import FullPageImageView from "ayyra/common/full-page-image";
 
 export default async function PhotoPage({
   params,
@@ -7,8 +6,6 @@ export default async function PhotoPage({
   params: { id: string };
 }) {
   const photoId = (await params).id;
-  const idAsNumber = Number(photoId);
-  if (Number.isNaN(idAsNumber)) throw new Error("Invalid photo id");
 
-  return <FullPageImageView id={idAsNumber} />;
+  return <FullPageImageView photoId={photoId} />;
 }
