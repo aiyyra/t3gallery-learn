@@ -3,6 +3,7 @@
 import { useUploadThing } from "ayyra/utils/uploadthing";
 import { duration } from "drizzle-orm/gel-core";
 import { useRouter } from "next/navigation";
+import { usePostHog } from "posthog-js/react";
 import type React from "react";
 import { toast } from "sonner";
 
@@ -71,8 +72,11 @@ function LoadingSpinnerSVG() {
 
 export function SimpleUploadButton() {
   const router = useRouter();
+  const posthog = usePostHog();
+
   const { inputProps } = useUploadThingInputProps("imageUploader", {
     onUploadBegin() {
+      posthog.capture("upload-begin");
       toast(
         <div className="flex items-center gap-2 text-white">
           <LoadingSpinnerSVG /> <span className="text-lg">Uploading...</span>
