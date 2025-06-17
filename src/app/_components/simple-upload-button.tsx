@@ -1,8 +1,10 @@
 "use client";
 
 import { useUploadThing } from "ayyra/utils/uploadthing";
+import { duration } from "drizzle-orm/gel-core";
 import { useRouter } from "next/navigation";
 import type React from "react";
+import { toast } from "sonner";
 
 type Input = Parameters<typeof useUploadThing>;
 
@@ -49,7 +51,15 @@ function UploadSVG() {
 export function SimpleUploadButton() {
   const router = useRouter();
   const { inputProps } = useUploadThingInputProps("imageUploader", {
+    onUploadBegin() {
+      toast("Uploading...", {
+        duration: 100000,
+        id: "upload-begin",
+      });
+    },
     onClientUploadComplete() {
+      toast.dismiss("upload-begin");
+      toast("Upload Complete!");
       router.refresh();
     },
   });

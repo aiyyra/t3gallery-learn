@@ -10,6 +10,7 @@ import { ourFileRouter } from "ayyra/app/api/uploadthing/core";
 import { type Metadata } from "next";
 import { Geist } from "next/font/google";
 import { TopNav } from "./_components/topnav";
+import { Toaster } from "ayyra/components/ui/sonner";
 
 export const metadata: Metadata = {
   title: "t3gallery",
@@ -45,6 +46,7 @@ export default function RootLayout({
           </div>
           {modal}
           <div id="modal-root" />
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
