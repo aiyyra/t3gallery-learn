@@ -4,6 +4,7 @@ import { UploadThingError } from "uploadthing/server";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "ayyra/server/db";
 import { images } from "ayyra/server/db/schema";
+import { ratelimit } from "ayyra/server/ratelimit";
 
 const f = createUploadthing();
 
@@ -24,9 +25,12 @@ export const ourFileRouter = {
     .middleware(async ({ req }) => {
     //   This code runs on your server before upload
       const user = await currentUser()
-
       // If you throw, the user will not be able to upload
       if (!user?.id) throw new UploadThingError("Unauthorized");
+
+      const { success } = await ratelimit.limit(user.id);
+      if(!success) throw new Error("Ratelimited")
+
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId: user.id };
